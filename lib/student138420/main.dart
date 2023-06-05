@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pretest_prj/ver4/page/checkbox_radio.dart';
-import 'package:pretest_prj/ver4/page/login.dart';
-import 'package:pretest_prj/ver4/page/main_contact.dart';
-
+import './pages/home.dart';
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 218, 215, 225),
 );
@@ -12,11 +9,11 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 void main(List<String> args) {
-  runApp(const Ver4());
+  runApp(const Student1328430());
 }
 
-class Ver4 extends StatelessWidget {
-  const Ver4({super.key});
+class Student1328430 extends StatelessWidget {
+  const Student1328430({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +64,7 @@ class Ver4 extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainContact(),
-        '/login':(context) => Login(false),
-         '/signup':(context) => Login(true),
-         '/cr':(context) => const CheckboxOrRadio()
+        '/': (context) => const Home()
       },
     );
   }

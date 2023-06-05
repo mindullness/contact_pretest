@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pretest_prj/ver4/components/drawer.dart';
+import 'package:pretest_prj/ver4/db/contact_repository.dart';
 import 'package:pretest_prj/ver4/components/v4_contact_item.dart';
-import 'package:pretest_prj/ver4/db/repository.dart';
+
 import 'package:pretest_prj/ver4/model/v4_contact.dart';
+import 'package:pretest_prj/ver4/page/login.dart';
 import 'package:pretest_prj/ver4/page/manage_contact.dart';
 
 class MainContact extends StatefulWidget {
@@ -13,12 +16,12 @@ class MainContact extends StatefulWidget {
 
 class _MainContactState extends State<MainContact> {
   final TextEditingController _searchCtrler = TextEditingController();
-  List<V4Contact> _contacts = [];
+  // List<V4Contact> _contacts = [];
   List<V4Contact> _temp = [];
 
   @override
   void initState() {
-    _refreshContacts();
+    _refreshContacts('');
     super.initState();
   }
 
@@ -33,6 +36,7 @@ class _MainContactState extends State<MainContact> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        drawer: const DrawerMenu(),
         appBar: AppBar(
           title: const Text('All Contacts'),
           centerTitle: true,
@@ -41,6 +45,8 @@ class _MainContactState extends State<MainContact> {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: ElevatedButton(
                 style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => const RoundedRectangleBorder()),
                     backgroundColor: MaterialStateColor.resolveWith(
                         (states) => Colors.indigo)),
                 child: const Icon(
@@ -53,7 +59,30 @@ class _MainContactState extends State<MainContact> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
-                          V4ManageContact(true, V4Contact(0, '', '')),
+                          V4ManageContact(true, V4Contact('', '')),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => const RoundedRectangleBorder()),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.indigo)),
+                child: const Icon(
+                  Icons.app_registration_rounded,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  // Navigator.of(context).pop(true);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Login(true),
                     ),
                   );
                 },
@@ -61,6 +90,15 @@ class _MainContactState extends State<MainContact> {
             )
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Login(false),
+                ),
+              );
+            },
+            child: const Icon(Icons.login)),
         body: Column(
           children: [
             SizedBox(
@@ -68,7 +106,9 @@ class _MainContactState extends State<MainContact> {
                 decoration:
                     const InputDecoration(prefixIcon: Icon(Icons.search)),
                 controller: _searchCtrler,
-                onEditingComplete: _search,
+                onEditingComplete: () {
+                  _refreshContacts(_searchCtrler.text);
+                },
               ),
             ),
             Expanded(
@@ -176,22 +216,23 @@ class _MainContactState extends State<MainContact> {
                 ]));
   }
 
-  Future<void> _refreshContacts() async {
-    await V4Repository.getContacts()
-        .then((result) => _contacts = _temp = result);
+  Future<void> _refreshContacts(String searchText) async {
+    await ContactRepository.getContacts(searchText)
+        .then((result) => _temp = result);
+    // .then((result) => _contacts = _temp = result);
     setState(() {});
   }
 
-  void _search() {
-    String text = _searchCtrler.text;
-    _temp = _contacts
-        .where((e) => e.name.toLowerCase().contains(text.toLowerCase()))
-        .toList();
-    setState(() {});
-  }
+  // void _search() {
+  //   String text = _searchCtrler.text;
+  //   _temp = _contacts
+  //       .where((e) => e.name.toLowerCase().contains(text.toLowerCase()))
+  //       .toList();
+  //   setState(() {});
+  // }
 
   Future<void> _deleteContact(V4Contact contact) async {
-    await V4Repository.delete(contact.id).then((value) => {
+    await ContactRepository.delete(contact.id!).then((value) => {
           if (value)
             {
               // _contacts.remove(contact),
@@ -200,7 +241,7 @@ class _MainContactState extends State<MainContact> {
                 Icon(Icons.done, color: Colors.red),
                 Text('Delete successfully!')
               ]))),
-              _refreshContacts()
+              _refreshContacts('')
             }
           else
             {

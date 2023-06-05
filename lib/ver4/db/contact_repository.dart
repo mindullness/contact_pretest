@@ -2,7 +2,7 @@ import 'package:pretest_prj/ver4/db/v4_db.dart';
 import 'package:pretest_prj/ver4/model/v4_contact.dart';
 import 'package:sqflite/sqflite.dart';
 
-class V4Repository {
+class ContactRepository {
 
   // static Future<List<V4Contact>> getContacts() async {
   //   final dB = await DB().db;
