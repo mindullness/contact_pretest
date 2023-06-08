@@ -6,7 +6,6 @@ class TetsRepository {
   static Future<List<TestContact>> getContacts() async {
     final dB = await TestDB().db;
     // await dB.execute('''DROP TABLE IF EXISTS ${TestEnum.tblName}''');
-    
     final result = await dB.query(
       TestEnum.tblName,
       orderBy: TestEnum.name,

@@ -1,10 +1,8 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:pretest_prj/student138420/components/add_dialog.dart';
 import 'package:pretest_prj/student138420/components/test_drawer.dart';
 import 'package:pretest_prj/student138420/db/repo/contact_repository.dart';
 import 'package:pretest_prj/student138420/models/test_contact.dart';
-import 'package:pretest_prj/student138420/utils/snackbar_helper.dart';
 import 'package:pretest_prj/student138420/components/contact_list.dart';
 
 class Home extends StatefulWidget {
@@ -20,7 +18,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         text: 'All contacts',
         icon: Icon(
           Icons.done_all,
-          color: Color.fromARGB(255, 247, 0, 0),
+          color: Color.fromARGB(255, 20, 35, 247),
         )),
     Tab(text: 'Favorite', icon: Icon(Icons.favorite, color: Colors.pink)),
   ];
